@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pac-Man: Escape del Laberinto Encantado</title>
+    <style>
+      @font-face {
+        font-family: "BDCartoonShoutRegular";
+        src: url("BD_Cartoon_Shout-webfont.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      body {
+        width: 342px;
+        margin: 0 auto;
+        font-family: sans-serif;
+        text-align: center;
+      }
+
+      h1 {
+        font-family: BDCartoonShoutRegular;
+      }
+
+      #intro-screen,
+      #pacman {
+        margin-top: 20px;
+      }
+
+      #pacman {
+        display: none;
+        height: 450px;
+        width: 342px;
+        margin: 20px auto;
+      }
+
+      #shim {
+        font-family: BDCartoonShoutRegular;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="shim">shim for font face</div>
+
+    <div id="intro-screen">
+      <h1>Pac-Man: Escape del Laberinto Encantado</h1>
+      <p>
+        Bienvenido a juego reinventado por Todd y Mel. Ayuda a Pac-Man a escapar
+        del laberinto encantado mientras esquivas a los guardias fantasmales.
+      </p>
+      <h3>Instrucciones:</h3>
+      <ul style="text-align: left">
+        <li>Usa las teclas de flecha para mover a Pac-Man.</li>
+        <li>Come todos los puntos para ganar.</li>
+        <li>Evita a los fantasmas o perderás una vida.</li>
+        <li>Power Pellets: fantasmas vulnerables por 10s (ESFERAS VERDES).</li>
+        <li>Shield Power-Up: protección por 5s (ESFERAS MORADAS).</li>
+        <li>Presiona "r" para reiniciar tras un Game Over.</li>
+      </ul>
+      <button id="start-button">Comenzar</button>
+    </div>
+
+    <div id="pacman"></div>
+
+    <script src="modernizr-1.5.min.js"></script>
+    <script src="pacman.js"></script>
+    <script>
+      document
+        .getElementById("start-button")
+        .addEventListener("click", function () {
+          document.getElementById("intro-screen").style.display = "none";
+          var el = document.getElementById("pacman");
+          el.style.display = "block";
+
+          if (
+            Modernizr.canvas &&
+            Modernizr.localstorage &&
+            Modernizr.audio &&
+            (Modernizr.audio.ogg || Modernizr.audio.mp3)
+          ) {
+            PACMAN.init(el, "./");
+          } else {
+            el.innerHTML =
+              "Lo sentimos, necesitas un navegador moderno<br /><small>(Firefox 3.6+, Chrome 4+, Opera 10+ y Safari 4+)</small>";
+          }
+        });
+    </script>
+
+    <style>
+      .controles {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        z-index: 1000;
+      }
+      .fila-controles {
+        display: flex;
+        gap: 20px;
+      }
+      .btn-direccion {
+        background-color: #ffcc00;
+        border: none;
+        padding: 15px 20px;
+        font-size: 20px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px #888;
+      }
+    </style>
+
+    <div class="controles">
+      <div class="fila-controles">
+        <button class="btn-direccion" onclick="simularTecla('38')">⬆️</button>
+      </div>
+      <div class="fila-controles">
+        <button class="btn-direccion" onclick="simularTecla('37')">⬅️</button>
+        <button class="btn-direccion" onclick="simularTecla('40')">⬇️</button>
+        <button class="btn-direccion" onclick="simularTecla('39')">➡️</button>
+      </div>
+    </div>
+
+    <script>
+      function simularTecla(codigo) {
+        document.dispatchEvent(
+          new KeyboardEvent("keydown", { keyCode: parseInt(codigo) })
+        );
+      }
+    </script>
+  </body>
+</html>
